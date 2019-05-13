@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './utils/connection.dart';
 
 void main() => runApp(MyApp());
 
@@ -59,6 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SqliteDB.connect().then((database) {
+      return database.rawQuery('select count(*) from users');
+    }).then((data) {
+      print(data);
+    } );
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
