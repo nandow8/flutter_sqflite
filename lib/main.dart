@@ -55,7 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
             getUsers();
           },),
           ListUsers(
-            users: _users, 
+            users: _users,
+            onChange: () {
+              getUsers();
+            },
           ),
         ],
       ),
