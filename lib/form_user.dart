@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './utils/connection.dart';
 
 class FormUser extends StatefulWidget {
   @override
@@ -7,7 +8,9 @@ class FormUser extends StatefulWidget {
 
 class _FormUserState extends State<FormUser> {
   final _formKey = GlobalKey<FormState>();
-  Map<String, dynamic> _formData = {};
+  Map<String, dynamic> _formData = { // disponivel na classe inteira - global
+    'enabled': false
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class _FormUserState extends State<FormUser> {
                 },
               ),
               Switch(
-                value: false,
+                value: _formData['enabled'],
                 onChanged: (value) {
                   _formData['enabled'] = value;
                 },
@@ -55,6 +58,7 @@ class _FormUserState extends State<FormUser> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
+                    _insertData();
                     _formKey.currentState.reset();
                   }
                 },
@@ -64,5 +68,22 @@ class _FormUserState extends State<FormUser> {
         ),
       ),
     );
+  }
+
+  _insertData() async {
+    var data = [
+      _formData['name'],
+      _formData['email'],
+      _formData['enabled'],
+    ];
+
+    var database = await SqliteDB.connect();
+    database.transaction((txn) async {
+      int id = await txn.rawInsert(
+        'INSERT INTO users (name, email, enabled) VALUES (?, ?, ?)',
+        data
+      );
+      print(id);
+    });
   }
 }
