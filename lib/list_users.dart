@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import './utils/connection.dart';
+import './form_edit_user.dart';
 
 class ListUsers extends StatefulWidget {
   List users;
@@ -38,7 +39,21 @@ class _ListUsersState extends State<ListUsers> {
                 color: Colors.blue,
                 icon: Icons.edit,
                 onTap: () {
-                  print('editarx');
+                  // print('editarx');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Editando usuário'),
+                        content: FormEditUser(initialData: _users[index],),
+                        // actions: <Widget>[
+                        //   FlatButton(
+                        //     child: Text('Cancelar'),
+                        //   )
+                        // ],
+                      );
+                    }
+                  );
                 },
               ),
               IconSlideAction(
