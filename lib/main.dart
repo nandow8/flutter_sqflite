@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import './utils/connection.dart';
 import './form_user.dart';
 import './list_users.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -30,35 +29,47 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  Database _database;
+  List _users = [];
 
-  void _incrementCounter() {
-    setState(() {
-      
-      _counter++;
-    });
+  void initState() {
+    getUsers();
   }
 
   @override
   Widget build(BuildContext context) {
     SqliteDB.connect().then((database) {
-      return database.rawQuery('select count(*) from users');
-    }).then((data) {
-      print(data);
-    } );
+        return database.rawQuery('select * from users');
+      })
+      .then((data) {
+        print(data);
+      });
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Column(
-          children: <Widget>[
-            
-            FormUser(),
-          
-            ListUsers(),
-          ],
+        children: <Widget>[
+          FormUser(onSaved: () {
+            getUsers();
+          },),
+          ListUsers(
+            users: _users, 
+          ),
+        ],
       ),
     );
+  }
+
+  getUsers() {
+    SqliteDB.connect().then((database) {
+      _database = database;
+      _database.rawQuery('select * from users').then((data) {
+        setState(() {
+         _users = data; 
+        });
+      });
+    });
   }
 }

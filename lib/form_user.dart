@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import './utils/connection.dart';
 
 class FormUser extends StatefulWidget {
+  var onSaved;
+  FormUser({ Key key, this.onSaved}) : super(key: key);
+
   @override
   _FormUserState createState() => _FormUserState();
 }
@@ -83,7 +86,8 @@ class _FormUserState extends State<FormUser> {
         'INSERT INTO users (name, email, enabled) VALUES (?, ?, ?)',
         data
       );
-      print(id);
+      // print(id);
+      widget.onSaved();
     });
   }
 }
