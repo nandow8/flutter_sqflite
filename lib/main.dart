@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './utils/connection.dart';
 import './form_user.dart';
+import './list_users.dart';
 
 void main() => runApp(MyApp());
 
@@ -100,14 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             
             FormUser(),
-            
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+          
+            ListUsers(),
           ],
         ),
       ),
